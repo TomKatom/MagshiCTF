@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagshiCTF - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/8e5bf069d5.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+</head>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .download-btn {
+        margin-right: 5%;
+    }
+    .flag-form {
+        display: flex;
+        align-items: flex-start;
+    }
+ .solvers {
+    position: absolute;
+ }
+</style>
+<body>
+    <h5 class="solvers"> Ctf Solvers: <%= solvers %> </h5>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome To MagshiCTF!</h1>
+            <p class="lead">A CTF Written By Tom Cengich And Ariel Adjadj.</p>
+            <hr class="my-4">
+            <div class="wrapper">
+                <a href="/download" class="btn btn-primary download-btn"> <i class="far fa-file-archive"></i> Download CTF Files </a>
+                <div class="form-inline flag-form">
+                    <div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control flag-input" placeholder="Flag" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-success" onclick="SubmitFlag()" id="submit" > <i class="far fa-flag"></i> Submit </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Flag Format: Magshi{<strong>Flag</strong>}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+let flagBox = document.getElementsByClassName("flag-input")[0]
+flagBox.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+    event.preventDefault()
+    SubmitFlag()
+  }
+})
+    function SubmitFlag() {
+        let flagBox = document.getElementsByClassName("flag-input")[0]
+        let flagText = flagBox.value
+
+        fetch('http://localhost:4000/verify?flag=' + flagText).then((res) => {
+            if(res.ok) {
+                Swal.fire(
+                'Good job!',
+                'You Solved The CTF.',
+                'success'
+                )
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid CTF Flag',
+                    text: 'The Flag You Entered Is Invalid.',
+                    footer: '<a href="https://bit.ly/38KkgwZ">Want To Give Up? Click Me.</a>'
+                })
+            }
+        })
+
+    }
+</script>
